@@ -18,43 +18,61 @@ class SignupViewController: UIViewController {
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     
+    @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         signUpButton.layer.cornerRadius = 15
-        
+        registerForKeyboardNotifications()
+        firstNameInput.addTarget(lastNameInput, action: #selector(becomeFirstResponder), for: .editingDidEndOnExit)
+        lastNameInput.addTarget(emailInput, action: #selector(becomeFirstResponder), for: .editingDidEndOnExit)
+        emailInput.addTarget(passwordInput, action: #selector(becomeFirstResponder), for: .editingDidEndOnExit)
         hideErrorLabel()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    @objc func dismissKeyboard() {
-        // Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
+    // dimiss keyboard when keyboard return key is pressed (currently connected to the password field)
+    @IBAction func done(_ sender: UITextField) {
+        sender.resignFirstResponder()
     }
     
     func hideErrorLabel() {
         errorLabel.alpha = 0
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height
-            }
-        }
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardAppear(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardAppear(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+    
+    @objc func onKeyboardAppear(_ notification: NSNotification) {
+        let info = notification.userInfo!
+        let rect: CGRect = info[UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        let keyboardSize = rect.size
+        
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
+        
+        // If active text field is hidden by keyboard, scroll to it so it's visible
+        var aRect = self.view.frame;
+        aRect.size.height -= keyboardSize.height;
+        
+        let activeField: UITextField? = [firstNameInput, lastNameInput, emailInput, passwordInput].first { $0.isFirstResponder }
+        if let activeField = activeField {
+            if !aRect.contains(activeField.frame.origin) {
+                let scrollPoint = CGPoint(x: 0, y: activeField.frame.origin.y-(keyboardSize.height + 10))
+                scrollView.setContentOffset(scrollPoint, animated: true)
+            }
         }
     }
     
@@ -106,7 +124,12 @@ class SignupViewController: UIViewController {
                 else {
                     let db = Firestore.firestore()
                     
-                    db.collection("users").addDocument(data: ["firstName": firstName, "lastName": lastName, "uid": result!.user.uid], completion: { (error) in
+                    // save user id to UserDefaults to keep them signed in
+                    UserDefaults.standard.set(result!.user.uid, forKey: "uid")
+                    UserDefaults.standard.synchronize()
+                    
+                    // save first and lastname to users db
+                    db.collection("users").document(result!.user.uid as String).setData(["firstName": firstName, "lastName": lastName, "uid": result!.user.uid], completion: { (error) in
                         // something went wrong when saving first and last name
                         if error != nil {
                             self.showError("User data couldn't be saved properly")

@@ -45,7 +45,7 @@ class LoginViewController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= (keyboardSize.height + 20)
+                self.view.frame.origin.y -= (keyboardSize.height + 5)
             }
         }
     }
@@ -81,17 +81,19 @@ class LoginViewController: UIViewController {
             showError(error!)
         }
         else {
-            
-        
-        let email = FormUtilities.sanitizeInput(emailInput)
-        let password = FormUtilities.sanitizeInput(passwordInput)
-        // sign in the user
+            let email = FormUtilities.sanitizeInput(emailInput)
+            let password = FormUtilities.sanitizeInput(passwordInput)
+            // sign in the user
             Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
                 if error != nil {
                     self.errorLabel.text! = error!.localizedDescription
                     self.errorLabel.alpha = 1
                 }
                 else {
+                    // save user id to UserDefaults to keep them signed in
+                    UserDefaults.standard.set(Auth.auth().currentUser!.uid, forKey: "uid")
+                    UserDefaults.standard.synchronize()
+
                     self.transitionToHome()
                 }
             }

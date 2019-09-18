@@ -126,6 +126,7 @@ class SignupViewController: UIViewController {
                     
                     // save user id to UserDefaults to keep them signed in
                     UserDefaults.standard.set(result!.user.uid, forKey: "uid")
+//                    UserDefaults.standard.set(firstName, forKey: "userFirstName")
                     UserDefaults.standard.synchronize()
                     
                     // save first and lastname to users db
@@ -135,9 +136,10 @@ class SignupViewController: UIViewController {
                             self.showError("User data couldn't be saved properly")
                         }
                     })
+                    
+                    self.transitionToHome()
                 }
             }
-            self.transitionToHome()
         }
     }
     

@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--InitialViewController-->
+        <!--Login or Sign Up-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="initVC" title="InitialViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="Firestore_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Firestore_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -174,12 +174,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ni1-gL-Fjd">
-                                <rect key="frame" x="40" y="84" width="295" height="38.333333333333343"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VG5-o0-lBr">
                                 <rect key="frame" x="40" y="718" width="55" height="30"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -190,12 +184,18 @@
                                     <action selector="logoutTapped:" destination="IsV-Nw-Cbb" eventType="touchUpInside" id="6Lj-yV-tze"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="26" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ni1-gL-Fjd">
+                                <rect key="frame" x="30" y="74" width="305" height="38.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ni1-gL-Fjd" firstAttribute="leading" secondItem="DbT-YY-WUi" secondAttribute="leading" constant="40" id="0bo-Ov-TqT"/>
+                            <constraint firstItem="ni1-gL-Fjd" firstAttribute="leading" secondItem="DbT-YY-WUi" secondAttribute="leading" constant="30" id="0bo-Ov-TqT"/>
                             <constraint firstItem="VG5-o0-lBr" firstAttribute="bottom" secondItem="DbT-YY-WUi" secondAttribute="bottom" constant="-30" id="F7s-Oo-IcJ"/>
-                            <constraint firstItem="ni1-gL-Fjd" firstAttribute="top" secondItem="DbT-YY-WUi" secondAttribute="top" constant="40" id="RZV-GH-GSD"/>
+                            <constraint firstItem="ni1-gL-Fjd" firstAttribute="top" secondItem="DbT-YY-WUi" secondAttribute="top" constant="30" id="RZV-GH-GSD"/>
                             <constraint firstItem="DbT-YY-WUi" firstAttribute="trailing" secondItem="ni1-gL-Fjd" secondAttribute="trailing" constant="40" id="lX3-DG-Hx8"/>
                             <constraint firstItem="VG5-o0-lBr" firstAttribute="leading" secondItem="DbT-YY-WUi" secondAttribute="leading" constant="40" id="y1W-6c-MxN"/>
                         </constraints>
@@ -358,10 +358,10 @@
             </objects>
             <point key="canvasLocation" x="2045.5999999999999" y="490.64039408866995"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--InitialViewController-->
         <scene sceneID="PEu-0V-VP0">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rbw-zT-jJI" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="initVC" title="InitialViewController" automaticallyAdjustsScrollViewInsets="NO" id="rbw-zT-jJI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" largeTitles="YES" id="GWi-4R-S7d">

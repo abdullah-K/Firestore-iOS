@@ -68,7 +68,7 @@ class HomeViewController: UIViewController {
     }
     
     func transitionToMain() {
-        let initialViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.initialViewController) as? ViewController
+        let initialViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.initialViewController) as? UINavigationController
         
         view.window?.rootViewController = initialViewController
         view.window?.makeKeyAndVisible()

@@ -30,22 +30,28 @@ class HomeViewController: UIViewController {
         let db = Firestore.firestore()
         let userUID = UserDefaults.standard.object(forKey: "uid")
         
+        let userName = UserDefaults.standard.object(forKey: "userFirstName")
+        
         let userInfo = db.collection("users").document(userUID as? String ?? Auth.auth().currentUser!.uid)
-
-        userInfo.getDocument{ (document, error) in
-            if let document = document, document.exists {
-                let data = document.data() ?? nil
-                completion(data?["firstName"] as! String)
-            }
-            else {
-                print(error?.localizedDescription ?? "nil")
+        
+        // return user name from UserDefaults if it exists, otherwise get it from the database
+        if userName != nil {
+            completion(userName as! String)
+        }
+        else {
+            userInfo.getDocument{ (document, error) in
+                if let document = document, document.exists {
+                    let data = document.data() ?? nil
+                    UserDefaults.standard.set(data?["firstName"] as! String, forKey: "userFirstName")
+                    UserDefaults.standard.synchronize()
+                    completion(data?["firstName"] as! String)
+                }
+                else {
+                    print(error?.localizedDescription ?? "nil")
+                }
             }
         }
 
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
     }
     
     @IBAction func logoutTapped(_ sender: Any) {
@@ -53,8 +59,9 @@ class HomeViewController: UIViewController {
             try Auth.auth().signOut()
             
             if Auth.auth().currentUser == nil {
-                // remove user session from device
+                // remove user session from device (and their first name)
                 UserDefaults.standard.removeObject(forKey: "uid")
+                UserDefaults.standard.removeObject(forKey: "userFirstName")
                 UserDefaults.standard.synchronize()
                 
                 self.transitionToMain()

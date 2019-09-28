@@ -25,11 +25,7 @@ class ViewController: UIViewController {
             transitionToHome()
         }
     }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
+
     func transitionToHome() {
         let homeViewController = storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.homeViewController) as? HomeViewController
         

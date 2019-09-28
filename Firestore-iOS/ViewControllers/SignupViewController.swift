@@ -31,10 +31,6 @@ class SignupViewController: UIViewController {
         
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     // dimiss keyboard when keyboard return key is pressed (currently connected to the password field)
     @IBAction func done(_ sender: UITextField) {
         sender.resignFirstResponder()
@@ -126,7 +122,7 @@ class SignupViewController: UIViewController {
                     
                     // save user id to UserDefaults to keep them signed in
                     UserDefaults.standard.set(result!.user.uid, forKey: "uid")
-//                    UserDefaults.standard.set(firstName, forKey: "userFirstName")
+                    UserDefaults.standard.set(firstName, forKey: "userFirstName")
                     UserDefaults.standard.synchronize()
                     
                     // save first and lastname to users db
